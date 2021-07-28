@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>marker.js Live manual testing</title>
+  <script>
+    let experiments;
+    document.addEventListener("DOMContentLoaded", function () {
+      experiments = new mjslive.Experiments();
+    });    
+
+    // class ComponentImage extends HTMLElement {
+    //   constructor() {
+    //     super();
+    //     this.attachShadow({mode: 'open'})
+    //   }
+    //   connectedCallback() {
+    //     const img = document.createElement('img');
+    //     img.src = 'images/landscape.jpg';
+    //     img.style.maxWidth = '50%';
+    //     img.className = 'img';
+    //     img.addEventListener('click', () => this.showMarkerArea(img));
+    //     this.shadowRoot.appendChild(img);
+    //   }
+    //   showMarkerArea(target) {
+    //     const markerArea = new markerjs2.MarkerArea(target);
+    //     markerArea.targetRoot = this.shadowRoot;
+    //     markerjs2.Style.styleSheetRoot = this.shadowRoot;
+    //     markerArea.show();
+    //   }
+    // }
+
+    // customElements.define('component-image', ComponentImage);
+  </script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      background-color: blue;
+      font-size: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div style="display: flex; flex-direction: column; align-items: center;">
+    <img src="images/landscape_sm.jpg" class="img" style="max-width: 50%;" id="testImage1" onclick="experiments.openMarkerView(document.getElementById('testImage1'))" />
+    <br />
+
+    <button onclick="experiments.closeMarkerView()">close</button>
+
+    <!-- <component-image></component-image> -->
+  </div>
+</body>
+</html>
