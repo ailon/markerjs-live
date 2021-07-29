@@ -37,6 +37,11 @@ export class Experiments {
     this.markerView1 = new MarkerView(target);
     Style.styleSheetRoot = document.head;
 
+    const stateText = (document.getElementById('markerAreaState') as HTMLTextAreaElement).value;
+    if (stateText !== undefined && stateText.trim() !== '') {
+      this.currentState = JSON.parse(stateText);
+    }
+
     this.markerView1.show(this.currentState);
   }
 

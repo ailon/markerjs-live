@@ -4,11 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>marker.js Live manual testing</title>
+  <script src="https://cdn.jsdelivr.net/npm/markerjs2@2.10.0/markerjs2.js"></script>
   <script>
     let experiments;
     document.addEventListener("DOMContentLoaded", function () {
       experiments = new mjslive.Experiments();
     });    
+
+    function showMarkerArea() {
+      const markerArea = new markerjs2.MarkerArea(document.getElementById('testImage1'));
+
+      markerArea.addRenderEventListener((dataUrl, state) => {
+        document.getElementById('markerAreaState').value = JSON.stringify(state);
+        document.getElementById('resultImage').src = dataUrl;
+      });
+      markerArea.show();
+
+      const stateText = document.getElementById('markerAreaState').value;
+      if (stateText !== undefined && stateText.trim() !== '') {
+        markerArea.restoreState(JSON.parse(stateText));
+      }
+    }
 
     // class ComponentImage extends HTMLElement {
     //   constructor() {
@@ -48,7 +64,12 @@
     <img src="images/landscape_sm.jpg" class="img" style="max-width: 50%;" id="testImage1" onclick="experiments.openMarkerView(document.getElementById('testImage1'))" />
     <br />
 
+    <button onclick="showMarkerArea()">edit markers</button>
     <button onclick="experiments.closeMarkerView()">close</button>
+
+    <textarea id="markerAreaState" style="width: 100%; max-width: 800px; height: 300px;"></textarea>
+
+    <img id="resultImage" />
 
     <!-- <component-image></component-image> -->
   </div>
