@@ -394,7 +394,7 @@ export class MarkerView {
     this.coverDiv.style.fontSize = '16px';
     this.coverDiv.style.userSelect = 'none';
     this.coverDiv.style.position = 'absolute';
-    this.coverDiv.style.top = `0px`;
+    this.coverDiv.style.top = `${this.target.offsetTop.toString()}px`;
     this.coverDiv.style.left = `${this.target.offsetLeft.toString()}px`;
     this.coverDiv.style.width = `${this.target.offsetWidth.toString()}px`;
     //this.coverDiv.style.height = `${this.target.offsetHeight.toString()}px`;
@@ -591,7 +591,7 @@ export class MarkerView {
 
   private positionUI() {
     this.setTopLeft();
-    this.coverDiv.style.top = `0px`;
+    this.coverDiv.style.top = `${this.target.offsetTop.toString()}px`;
     this.coverDiv.style.left = `${this.target.offsetLeft.toString()}px`;
     this.positionMarkerImage();
     this.positionLogo();
