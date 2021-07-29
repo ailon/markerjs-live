@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { MarkerBaseState, MarkerView, Style } from '../../src';
+import { MarkerBaseState, MarkerView, Style } from '../../src/index';
 import { MarkerAreaState } from '../../src/MarkerAreaState';
 
 export * from './../../src/index';
@@ -41,6 +41,10 @@ export class Experiments {
     if (stateText !== undefined && stateText.trim() !== '') {
       this.currentState = JSON.parse(stateText);
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    this.markerView1.addEventListener('load', (mv) => console.log('loaded'));
+    this.markerView1.addEventListener('select', (mv, marker) => console.log(marker));
 
     this.markerView1.show(this.currentState);
   }

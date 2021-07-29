@@ -22,6 +22,7 @@ import { IPoint } from './core/IPoint';
 import { IStyleSettings } from './core/IStyleSettings';
 import { Settings } from './core/Settings';
 import { Style } from './core/Style';
+import { EventHandler, EventListenerRepository, EventType } from './core/Events';
 
 /**
  * @todo
@@ -181,6 +182,8 @@ export class MarkerView {
     this.showUI();
     this.open();
     this.restoreState(state);
+
+    this.eventListeners.get('load').forEach(loaded => loaded(this));
   }
 
   /**
@@ -507,12 +510,18 @@ export class MarkerView {
    * @param marker marker to select. Deselects current marker if undefined.
    */
   public setCurrentMarker(marker?: MarkerBase): void {
+    const currentChanged = this.currentMarker !== marker;
+
     if (this.currentMarker !== undefined) {
       this.currentMarker.deselect();
     }
     this.currentMarker = marker;
     if (this.currentMarker !== undefined) {
       this.currentMarker.select();
+    }
+
+    if (currentChanged) {
+      this.eventListeners.get('select').forEach(selected => selected(this, marker));
     }
   }
 
@@ -596,5 +605,10 @@ export class MarkerView {
     this.coverDiv.style.left = `${this.target.offsetLeft.toString()}px`;
     this.positionMarkerImage();
     this.positionLogo();
+  }
+
+  private eventListeners = new EventListenerRepository();
+  public addEventListener<T extends EventType>(eventType: T, handler: EventHandler<T>): void {
+    this.eventListeners.addEventListener(eventType, handler);
   }
 }
