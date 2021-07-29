@@ -174,12 +174,13 @@ export class MarkerView {
   }
 
   /**
-   * Initializes the MarkerArea and opens the UI.
+   * Initializes the MarkerView and show the markers.
    */
-  public show(): void {
+  public show(state: MarkerAreaState): void {
     this.setWindowHeight();
     this.showUI();
     this.open();
+    this.restoreState(state);
   }
 
   /**
@@ -466,7 +467,7 @@ export class MarkerView {
    *
    * @param state - previously saved state object.
    */
-  public restoreState(state: MarkerAreaState): void {
+  private restoreState(state: MarkerAreaState): void {
     this.markers.splice(0);
     while (this.markerImage.lastChild) {
       this.markerImage.removeChild(this.markerImage.lastChild);

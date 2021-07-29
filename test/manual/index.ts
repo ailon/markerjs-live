@@ -37,10 +37,7 @@ export class Experiments {
     this.markerView1 = new MarkerView(target);
     Style.styleSheetRoot = document.head;
 
-    this.markerView1.show();
-    if (this.currentState) {
-      this.markerView1.restoreState(this.currentState);
-    }
+    this.markerView1.show(this.currentState);
   }
 
   public closeMarkerView(): void {
