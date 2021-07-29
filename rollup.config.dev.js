@@ -12,22 +12,25 @@ export default {
     dir: 'build-dev',
     format: 'umd',
     sourcemap: true,
-    name: 'mjslive'
+    name: 'mjslive',
   },
   plugins: [
     //del({ targets: 'build-dev/*' }),
-    typescript(), 
+    typescript(),
     svgo(),
     htmlTemplate({
       template: 'test/manual/template.html',
-      target: 'index.html'      
+      target: 'index.html',
     }),
     copy({
-      targets: [{
-        src: 'test/manual/images/**/*', dest: 'build-dev/images'
-      }]
+      targets: [
+        {
+          src: 'test/manual/images/**/*',
+          dest: 'build-dev/images',
+        },
+      ],
     }),
-    dev('build-dev'),
-    livereload('build-dev')
-  ]
+    dev({ dirs: ['build-dev'], port: 8088 }),
+    livereload('build-dev'),
+  ],
 };
