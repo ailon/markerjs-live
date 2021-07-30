@@ -43,8 +43,18 @@ export class Experiments {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    this.markerView1.addEventListener('create', (mv) => console.log('created'));
+    this.markerView1.addEventListener('close', () => console.log('closed'));
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this.markerView1.addEventListener('load', (mv) => console.log('loaded'));
     this.markerView1.addEventListener('select', (mv, marker) => console.log(marker));
+    this.markerView1.addEventListener('over', (mv, marker) => console.log('over', marker));
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    this.markerView1.addEventListener('pointerdown', (mv, ev, marker) => console.log('down:', ev.clientX, ev.clientY, marker));
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    this.markerView1.addEventListener('pointerup', (mv, ev, marker) => console.log('up:', ev.clientX, ev.clientY, marker));
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    //this.markerView1.addEventListener('pointermove', (mv, ev, marker) => console.log('move:', ev.clientX, ev.clientY));
 
     this.markerView1.show(this.currentState);
   }

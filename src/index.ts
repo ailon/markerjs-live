@@ -40,6 +40,6 @@ export {
   EventHandler,
   IEventListenerRepository,
   EventListenerRepository,
-  LoadEventHandler,
-  SelectEventHandler,
+  MarkerViewEventHandler as LoadEventHandler,
+  MarkerEventHandler as SelectEventHandler,
 } from './core/Events';

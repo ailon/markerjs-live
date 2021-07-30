@@ -22,7 +22,11 @@ import { IPoint } from './core/IPoint';
 import { IStyleSettings } from './core/IStyleSettings';
 import { Settings } from './core/Settings';
 import { Style } from './core/Style';
-import { EventHandler, EventListenerRepository, IEventListenerRepository } from './core/Events';
+import {
+  EventHandler,
+  EventListenerRepository,
+  IEventListenerRepository,
+} from './core/Events';
 
 /**
  * @todo
@@ -71,7 +75,6 @@ export class MarkerView {
 
   private logoUI: HTMLElement;
 
-
   public availableMarkerTypes: typeof MarkerBase[] = [
     FrameMarker,
     FreehandMarker,
@@ -101,6 +104,7 @@ export class MarkerView {
   public targetRoot: HTMLElement;
 
   private currentMarker?: MarkerBase;
+  private hoveredMarker?: MarkerBase;
   private markers: MarkerBase[] = [];
 
   private isDragging = false;
@@ -181,9 +185,11 @@ export class MarkerView {
     this.setWindowHeight();
     this.showUI();
     this.open();
+    this.eventListeners['create'].forEach((created) => created(this));
+
     this.restoreState(state);
 
-    this.eventListeners['load'].forEach(loaded => loaded(this));
+    this.eventListeners['load'].forEach((loaded) => loaded(this));
   }
 
   /**
@@ -198,6 +204,8 @@ export class MarkerView {
         this.targetObserver.unobserve(this.target);
       }
       this._isOpen = false;
+
+      this.eventListeners['close'].forEach(closed => closed(this));
     }
   }
 
@@ -521,7 +529,9 @@ export class MarkerView {
     }
 
     if (currentChanged) {
-      this.eventListeners['select'].forEach(selected => selected(this, marker));
+      this.eventListeners['select'].forEach((selected) =>
+        selected(this, marker)
+      );
     }
   }
 
@@ -538,6 +548,12 @@ export class MarkerView {
         );
       } else {
         this.setCurrentMarker();
+      }
+
+      if (this.eventListeners['pointerdown'].length > 0) {
+        this.eventListeners['pointerdown'].forEach((pointerDownHandler) =>
+          pointerDownHandler(this, ev, hitMarker)
+        );
       }
     }
   }
@@ -566,7 +582,24 @@ export class MarkerView {
         );
       }
     }
+
+    if (
+      this.eventListeners['over'].length > 0 ||
+      this.eventListeners['pointermove'].length > 0
+    ) {
+      const hitMarker = this.markers.find((m) => m.ownsTarget(ev.target));
+      if (hitMarker !== this.hoveredMarker) {
+        this.hoveredMarker = hitMarker;
+        this.eventListeners['over'].forEach((overHandler) =>
+          overHandler(this, this.hoveredMarker)
+        );
+      }
+      this.eventListeners['pointermove'].forEach((pointerMoveHandler) =>
+        pointerMoveHandler(this, ev, hitMarker)
+      );
+    }
   }
+
   private onPointerUp(ev: PointerEvent) {
     if (this.touchPoints > 0) {
       this.touchPoints--;
@@ -579,6 +612,14 @@ export class MarkerView {
       }
     }
     this.isDragging = false;
+
+    if (this.eventListeners['pointerup'].length > 0) {
+      const hitMarker = this.markers.find((m) => m.ownsTarget(ev.target));
+      this.eventListeners['pointerup'].forEach((pointerUpHandler) =>
+        pointerUpHandler(this, ev, hitMarker)
+      );
+    }
+
   }
 
   private onKeyUp(ev: KeyboardEvent) {
@@ -610,7 +651,10 @@ export class MarkerView {
   }
 
   private eventListeners = new EventListenerRepository();
-  public addEventListener<T extends keyof IEventListenerRepository>(eventType: T, handler: EventHandler<T>): void {
+  public addEventListener<T extends keyof IEventListenerRepository>(
+    eventType: T,
+    handler: EventHandler<T>
+  ): void {
     this.eventListeners.addEventListener(eventType, handler);
   }
 }

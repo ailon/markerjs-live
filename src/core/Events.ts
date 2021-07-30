@@ -1,31 +1,54 @@
 import { MarkerView } from '../MarkerView';
 import { MarkerBase } from './MarkerBase';
 
-export type LoadEventHandler = (markerView: MarkerView) => void;
-export type SelectEventHandler = (
+export type MarkerViewEventHandler = (markerView: MarkerView) => void;
+export type MarkerEventHandler = (
   markerView: MarkerView,
+  marker?: MarkerBase
+) => void;
+export type PointerEventHandler = (
+  markerView: MarkerView,
+  event: PointerEvent,
   marker?: MarkerBase
 ) => void;
 
 export interface IEventListenerRepository {
-  load: LoadEventHandler[];
-  select: SelectEventHandler[];
+  create: MarkerViewEventHandler[];
+  close: MarkerViewEventHandler[];
+  load: MarkerViewEventHandler[];
+  select: MarkerEventHandler[];
+  over: MarkerEventHandler[];
+  pointerdown: PointerEventHandler[];
+  pointermove: PointerEventHandler[];
+  pointerup: PointerEventHandler[];
 }
 
-export type EventHandler<T extends keyof IEventListenerRepository> = T extends 'load'
-  ? LoadEventHandler
-  : T extends 'select'
-  ? SelectEventHandler
-  : SelectEventHandler;
+export type EventHandler<T extends keyof IEventListenerRepository> = T extends 'select'
+  ? MarkerEventHandler
+  : T extends 'over'
+  ? MarkerEventHandler
+  : T extends 'pointerdown'
+  ? PointerEventHandler
+  : T extends 'pointermove'
+  ? PointerEventHandler
+  : T extends 'pointerup'
+  ? PointerEventHandler
+  : MarkerViewEventHandler;
 
 export class EventListenerRepository implements IEventListenerRepository {
-  'load': LoadEventHandler[] = [];
-  'select': SelectEventHandler[] = [];
+  create: MarkerViewEventHandler[] = [];
+  close: MarkerViewEventHandler[] = [];
+  load: MarkerViewEventHandler[] = [];
+  select: MarkerEventHandler[] = [];
+  over: MarkerEventHandler[] = [];
+  pointerdown: PointerEventHandler[] = [];
+  pointermove: PointerEventHandler[] = [];
+  pointerup: PointerEventHandler[] = [];
 
   public addEventListener<T extends keyof IEventListenerRepository>(
     eventType: T,
     handler: EventHandler<T>
   ): void {
-    this[eventType].push(handler);
+    (<Array<EventHandler<T>>>this[eventType]).push(handler);
   }
 }
