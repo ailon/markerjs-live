@@ -536,6 +536,8 @@ export class MarkerView {
           this.clientToLocalCoordinates(ev.clientX, ev.clientY),
           ev.target
         );
+      } else {
+        this.setCurrentMarker();
       }
     }
   }
