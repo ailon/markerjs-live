@@ -22,7 +22,7 @@ import { IPoint } from './core/IPoint';
 import { IStyleSettings } from './core/IStyleSettings';
 import { Settings } from './core/Settings';
 import { Style } from './core/Style';
-import { EventHandler, EventListenerRepository, EventType } from './core/Events';
+import { EventHandler, EventListenerRepository, IEventListenerRepository } from './core/Events';
 
 /**
  * @todo
@@ -183,7 +183,7 @@ export class MarkerView {
     this.open();
     this.restoreState(state);
 
-    this.eventListeners.get('load').forEach(loaded => loaded(this));
+    this.eventListeners['load'].forEach(loaded => loaded(this));
   }
 
   /**
@@ -521,7 +521,7 @@ export class MarkerView {
     }
 
     if (currentChanged) {
-      this.eventListeners.get('select').forEach(selected => selected(this, marker));
+      this.eventListeners['select'].forEach(selected => selected(this, marker));
     }
   }
 
@@ -608,7 +608,7 @@ export class MarkerView {
   }
 
   private eventListeners = new EventListenerRepository();
-  public addEventListener<T extends EventType>(eventType: T, handler: EventHandler<T>): void {
+  public addEventListener<T extends keyof IEventListenerRepository>(eventType: T, handler: EventHandler<T>): void {
     this.eventListeners.addEventListener(eventType, handler);
   }
 }

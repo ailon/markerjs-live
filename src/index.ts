@@ -38,8 +38,8 @@ export { TextMarkerState } from './markers/text-marker/TextMarkerState';
 
 export {
   EventHandler,
+  IEventListenerRepository,
   EventListenerRepository,
-  EventType,
   LoadEventHandler,
   SelectEventHandler,
 } from './core/Events';
