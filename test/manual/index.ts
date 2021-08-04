@@ -1,6 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { MarkerBaseState, MarkerView, Style } from '../../src/index';
+import { MarkerBaseState, MarkerView } from '../../src/index';
 import { MarkerAreaState } from '../../src/MarkerAreaState';
+import { Animate } from '../../src/plugins/animate/Animate';
 
 export * from './../../src/index';
 
@@ -35,7 +36,7 @@ export class Experiments {
 
   public openMarkerView(target: HTMLImageElement): void {
     this.markerView1 = new MarkerView(target);
-    Style.styleSheetRoot = document.head;
+    //Style.styleSheetRoot = document.head;
 
     const stateText = (document.getElementById('markerAreaState') as HTMLTextAreaElement).value;
     if (stateText !== undefined && stateText.trim() !== '') {
@@ -55,6 +56,9 @@ export class Experiments {
     this.markerView1.addEventListener('pointerup', (mv, ev, marker) => console.log('up:', ev.clientX, ev.clientY, marker));
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     //this.markerView1.addEventListener('pointermove', (mv, ev, marker) => console.log('move:', ev.clientX, ev.clientY));
+
+    const animate = new Animate();
+    this.markerView1.addPlugin(animate);
 
     this.markerView1.show(this.currentState);
   }
