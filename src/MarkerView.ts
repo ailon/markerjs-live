@@ -21,12 +21,13 @@ import { IPoint } from './core/IPoint';
 
 import { IStyleSettings } from './core/IStyleSettings';
 import { Settings } from './core/Settings';
-import { Style } from './core/Style';
+import { StyleManager } from './core/Style';
 import {
   EventHandler,
   EventListenerRepository,
   IEventListenerRepository,
 } from './core/Events';
+import { IMarkerViewPlugin } from './core/MarkerViewPlugin';
 
 /**
  * @todo
@@ -60,7 +61,7 @@ export class MarkerView {
   private top: number;
   private windowHeight: number;
 
-  private markerImage: SVGSVGElement;
+  public markerImage: SVGSVGElement;
   private markerImageHolder: HTMLDivElement;
   private defs: SVGDefsElement;
 
@@ -74,6 +75,17 @@ export class MarkerView {
   private touchPoints = 0;
 
   private logoUI: HTMLElement;
+
+  private static instanceCounter = 0;
+  private _instanceNo: number;
+  public get instanceNo(): number {
+    return this._instanceNo;
+  }
+
+  /**
+   * Manage style releated settings via the `styles` property.
+   */
+  public styles: StyleManager;
 
   public availableMarkerTypes: typeof MarkerBase[] = [
     FrameMarker,
@@ -105,7 +117,7 @@ export class MarkerView {
 
   private currentMarker?: MarkerBase;
   private hoveredMarker?: MarkerBase;
-  private markers: MarkerBase[] = [];
+  public markers: MarkerBase[] = [];
 
   private isDragging = false;
 
@@ -122,6 +134,10 @@ export class MarkerView {
     return this._isOpen;
   }
 
+  private plugins: IMarkerViewPlugin[] = [];
+
+  public readonly MARKER_CONTAINER_CLASS_SUFFIX = 'marker-container';
+
   /**
    * Creates a new MarkerArea for the specified target image.
    *
@@ -133,13 +149,12 @@ export class MarkerView {
    * @param target image object to mark up.
    */
   constructor(target: HTMLImageElement) {
-    Style.settings = Style.defaultSettings;
-    this.uiStyleSettings = Style.settings;
+    this._instanceNo = MarkerView.instanceCounter++;
+
+    this.styles = new StyleManager(this.instanceNo);
 
     this.target = target;
     this.targetRoot = document.body;
-
-    Style.removeStyleSheet();
 
     this.open = this.open.bind(this);
     this.setTopLeft = this.setTopLeft.bind(this);
@@ -185,6 +200,9 @@ export class MarkerView {
     this.setWindowHeight();
     this.showUI();
     this.open();
+    
+    this.plugins.forEach(plugin => plugin.init(this));
+    
     this.eventListeners['create'].forEach((created) => created(this));
 
     this.restoreState(state);
@@ -401,7 +419,7 @@ export class MarkerView {
 
   private showUI(): void {
     this.coverDiv = document.createElement('div');
-    this.coverDiv.className = Style.CLASS_PREFIX;
+    this.coverDiv.className = `${this.styles.classNamePrefixBase} ${this.styles.classNamePrefix}`;
     // hardcode font size so nothing inside is affected by higher up settings
     this.coverDiv.style.fontSize = '16px';
     this.coverDiv.style.userSelect = 'none';
@@ -507,6 +525,7 @@ export class MarkerView {
 
   private addNewMarker(markerType: typeof MarkerBase): MarkerBase {
     const g = SvgHelper.createGroup();
+    g.setAttribute('class', `${this.styles.classNamePrefix}${this.MARKER_CONTAINER_CLASS_SUFFIX}`);
     this.markerImage.appendChild(g);
 
     return new markerType(g, this.overlayContainer, this.settings);
@@ -656,5 +675,16 @@ export class MarkerView {
     handler: EventHandler<T>
   ): void {
     this.eventListeners.addEventListener(eventType, handler);
+  }
+
+  public addPlugin(plugin: IMarkerViewPlugin): void {
+    this.plugins.push(plugin);
+  }
+  
+  public removePlugin(plugin: IMarkerViewPlugin): void {
+    const pluginIndex = this.plugins.indexOf(plugin);
+    if (pluginIndex >= 0) {
+      this.plugins.splice(pluginIndex, 1);
+    }
   }
 }

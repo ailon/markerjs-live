@@ -12,6 +12,16 @@ export class SvgHelper {
   }
 
   /**
+   * Creates SVG stylesheet.
+   */
+  public static createStylesheet(): SVGStyleElement {
+    const stylesheet = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+    stylesheet.setAttribute('type', 'text/css');
+
+    return stylesheet;
+  }
+
+  /**
    * Sets attributes on an arbitrary SVG element
    * @param el - target SVG element.
    * @param attributes - set of name-value attribute pairs.
