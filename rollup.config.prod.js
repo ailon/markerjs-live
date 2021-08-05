@@ -34,7 +34,7 @@ export default [{
   ]
 }, {
   input: "./dts/index.d.ts",
-  output: [{ file: "./dist/markerjs2.d.ts", format: "es" }],
+  output: [{ file: "./dist/markerjs-live.d.ts", format: "es" }],
   plugins: [dts()],
 }, {
   input: ['src/index.ts'],
