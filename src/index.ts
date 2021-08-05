@@ -3,7 +3,7 @@ export { MarkerAreaState } from './MarkerAreaState';
 
 export { Activator } from './core/Activator';
 export { SvgHelper } from './core/SvgHelper';
-export { StyleManager, StyleClass } from './core/Style';
+export { StyleManager, StyleClass, StyleRule } from './core/Style';
 export { Settings } from './core/Settings';
 export { ITransformMatrix, TransformMatrix } from './core/TransformMatrix';
 export { IPoint } from './core/IPoint';
@@ -39,6 +39,8 @@ export {
   EventHandler,
   IEventListenerRepository,
   EventListenerRepository,
-  MarkerViewEventHandler as LoadEventHandler,
-  MarkerEventHandler as SelectEventHandler,
+  MarkerViewEventHandler,
+  MarkerEventHandler,
 } from './core/Events';
+
+export { IMarkerViewPlugin } from './core/MarkerViewPlugin';
