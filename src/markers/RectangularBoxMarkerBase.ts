@@ -168,13 +168,14 @@ export class RectangularBoxMarkerBase extends MarkerBase {
    * 
    * @param point - event coordinates.
    */
-  public manipulate(point: IPoint): void {
-  }
+  // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+  public manipulate(point: IPoint): void {}
 
   /**
    * Resizes the marker based on pointer coordinates and context.
    * @param point - pointer coordinates.
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected resize(point: IPoint): void {
     this.setSize();
   }

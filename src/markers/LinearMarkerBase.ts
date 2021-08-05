@@ -1,7 +1,6 @@
 import { MarkerBase } from '../core/MarkerBase';
 
 import { IPoint } from '../core/IPoint';
-import { SvgHelper } from '../core/SvgHelper';
 
 import { Settings } from '../core/Settings';
 import { LinearMarkerBaseState } from './LinearMarkerBaseState';
@@ -101,6 +100,7 @@ export class LinearMarkerBase extends MarkerBase {
    * Resizes the line marker.
    * @param point - current manipulation coordinates.
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected resize(point: IPoint): void {
     this.adjustVisual();
   }

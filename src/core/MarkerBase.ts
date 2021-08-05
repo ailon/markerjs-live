@@ -1,5 +1,5 @@
 import { IPoint } from './IPoint';
-import { MarkerBaseState, MarkerState } from './MarkerBaseState';
+import { MarkerBaseState } from './MarkerBaseState';
 import { Settings } from './Settings';
 
 /**

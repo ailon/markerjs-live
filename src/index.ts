@@ -5,7 +5,6 @@ export { Activator } from './core/Activator';
 export { SvgHelper } from './core/SvgHelper';
 export { StyleManager, StyleClass } from './core/Style';
 export { Settings } from './core/Settings';
-export { IStyleSettings } from './core/IStyleSettings';
 export { ITransformMatrix, TransformMatrix } from './core/TransformMatrix';
 export { IPoint } from './core/IPoint';
 

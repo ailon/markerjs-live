@@ -19,7 +19,6 @@ import { EllipseFrameMarker } from './markers/ellipse-frame-marker/EllipseFrameM
 import { MarkerAreaState } from './MarkerAreaState';
 import { IPoint } from './core/IPoint';
 
-import { IStyleSettings } from './core/IStyleSettings';
 import { Settings } from './core/Settings';
 import { StyleManager } from './core/Style';
 import {
@@ -122,7 +121,6 @@ export class MarkerView {
   private isDragging = false;
 
   public settings: Settings = new Settings();
-  public uiStyleSettings: IStyleSettings;
 
   private _isOpen = false;
   /**

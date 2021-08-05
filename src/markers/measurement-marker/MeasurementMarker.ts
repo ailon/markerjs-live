@@ -3,7 +3,6 @@ import { SvgHelper } from '../../core/SvgHelper';
 import { Settings } from '../../core/Settings';
 import { LineMarker } from '../line-marker/LineMarker';
 import { MarkerBaseState } from '../../core/MarkerBaseState';
-import { LineMarkerState } from '../line-marker/LineMarkerState';
 
 export class MeasurementMarker extends LineMarker {
   /**

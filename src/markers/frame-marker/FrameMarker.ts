@@ -1,6 +1,5 @@
 import { Settings } from '../../core/Settings';
 import { RectangleMarker } from '../RectangleMarker';
-import { RectangleMarkerState } from '../RectangleMarkerState';
 
 export class FrameMarker extends RectangleMarker {
   /**

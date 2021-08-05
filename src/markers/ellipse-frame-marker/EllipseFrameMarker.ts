@@ -1,5 +1,4 @@
 import { Settings } from '../../core/Settings';
-import { RectangleMarkerState } from '../RectangleMarkerState';
 import { EllipseMarker } from '../ellipse-marker/EllipseMarker';
 
 export class EllipseFrameMarker extends EllipseMarker {
