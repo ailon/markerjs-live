@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { MarkerBaseState, MarkerView } from '../../src/index';
 import { MarkerAreaState } from '../../src/MarkerAreaState';
-import { Animate } from '../../src/plugins/animate/Animate';
+// import { Animate } from '../../src/plugins/animate/Animate';
 
 export * from './../../src/index';
 
@@ -57,8 +57,8 @@ export class Experiments {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     //this.markerView1.addEventListener('pointermove', (mv, ev, marker) => console.log('move:', ev.clientX, ev.clientY));
 
-    const animate = new Animate();
-    this.markerView1.addPlugin(animate);
+    // const animate = new Animate();
+    // this.markerView1.addPlugin(animate);
 
     this.markerView1.show(this.currentState);
   }
