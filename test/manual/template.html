@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>marker.js Live manual testing</title>
-  <script src="https://cdn.jsdelivr.net/npm/markerjs2@2.10.0/markerjs2.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markerjs2"></script>
   <script>
     let experiments;
     document.addEventListener("DOMContentLoaded", function () {
@@ -13,6 +13,7 @@
 
     function showMarkerArea() {
       const markerArea = new markerjs2.MarkerArea(document.getElementById('testImage1'));
+      markerArea.availableMarkerTypes = markerArea.ALL_MARKER_TYPES;
 
       markerArea.addRenderEventListener((dataUrl, state) => {
         document.getElementById('markerAreaState').value = JSON.stringify(state);

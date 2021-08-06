@@ -34,6 +34,8 @@ export { LineMarkerState } from './markers/line-marker/LineMarkerState';
 export { MeasurementMarker } from './markers/measurement-marker/MeasurementMarker';
 export { TextMarker } from './markers/text-marker/TextMarker';
 export { TextMarkerState } from './markers/text-marker/TextMarkerState';
+export { CurveMarker } from './markers/curve-marker/CurveMarker';
+export { CurveMarkerState } from './markers/curve-marker/CurveMarkerState';
 
 export {
   EventHandler,

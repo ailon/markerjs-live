@@ -15,6 +15,7 @@ import { CalloutMarker } from './markers/callout-marker/CalloutMarker';
 import { EllipseMarker } from './markers/ellipse-marker/EllipseMarker';
 import { MeasurementMarker } from './markers/measurement-marker/MeasurementMarker';
 import { EllipseFrameMarker } from './markers/ellipse-frame-marker/EllipseFrameMarker';
+import { CurveMarker } from './markers/curve-marker/CurveMarker';
 
 import { MarkerAreaState } from './MarkerAreaState';
 import { IPoint } from './core/IPoint';
@@ -98,6 +99,7 @@ export class MarkerView {
     MeasurementMarker,
     CoverMarker,
     LineMarker,
+    CurveMarker
   ];
 
   /**
