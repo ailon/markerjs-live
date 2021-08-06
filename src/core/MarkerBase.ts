@@ -17,6 +17,12 @@ export class MarkerBase {
   public static typeName = 'MarkerBase';
 
   protected _outerContainer: SVGGElement;
+  /**
+   * Outer SVG group container not manipulated or transformed by the marker itself in any way
+   */
+  public get outerContainer(): SVGGElement {
+    return this._outerContainer;
+  }
 
   protected _container: SVGGElement;
   /**
