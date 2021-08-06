@@ -1,3 +1,4 @@
+import { SvgHelper } from './SvgHelper';
 import { IPoint } from './IPoint';
 import { MarkerBaseState } from './MarkerBaseState';
 import { Settings } from './Settings';
@@ -14,6 +15,8 @@ export class MarkerBase {
    * Used when adding {@link MarkerArea.availableMarkerTypes} via a string and to save and restore state.
    */
   public static typeName = 'MarkerBase';
+
+  protected _outerContainer: SVGGElement;
 
   protected _container: SVGGElement;
   /**
@@ -56,7 +59,10 @@ export class MarkerBase {
    * @param settings - settings object containing default markers settings.
    */
   constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
-    this._container = container;
+    this._outerContainer = container;
+    const innerContainer = SvgHelper.createGroup();
+    this._outerContainer.appendChild(innerContainer);
+    this._container = innerContainer;
     this._overlayContainer = overlayContainer;
     this.globalSettings = settings;
   }
