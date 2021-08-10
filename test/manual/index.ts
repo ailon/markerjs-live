@@ -146,6 +146,14 @@ export class Experiments {
       console.log('up:', ev.clientX, ev.clientY, marker)
     );
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    this.markerView1.addEventListener('pointerenter', (mv, ev, marker) =>
+      console.log('enter:', ev.clientX, ev.clientY, marker)
+    );
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    this.markerView1.addEventListener('pointerleave', (mv, ev, marker) =>
+      console.log('leave:', ev.clientX, ev.clientY, marker)
+    );
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     //this.markerView1.addEventListener('pointermove', (mv, ev, marker) => console.log('move:', ev.clientX, ev.clientY));
 
     // const animate = new Animate();

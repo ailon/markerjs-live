@@ -592,6 +592,7 @@ export class MarkerView {
     }
   }
 
+  private isPointerIn = false;
   private onPointerMove(ev: PointerEvent) {
     if (this.touchPoints === 1 || ev.pointerType !== 'touch') {
       if (this.currentMarker !== undefined || this.isDragging) {
@@ -613,9 +614,24 @@ export class MarkerView {
           overHandler(this, this.hoveredMarker)
         );
       }
+
       this.eventListeners['pointermove'].forEach((pointerMoveHandler) =>
         pointerMoveHandler(this, ev, hitMarker)
       );
+
+      if (!this.isPointerIn && (hitMarker !== undefined || this.markerImage === ev.target)) {
+        this.isPointerIn = true;
+        this.eventListeners['pointerenter'].forEach((pointerEnterHandler) =>
+          pointerEnterHandler(this, ev, hitMarker)
+        );
+      }
+
+      if (this.isPointerIn && hitMarker === undefined && this.markerImage !== ev.target) {
+        this.isPointerIn = false;
+        this.eventListeners['pointerleave'].forEach((pointerLeaveHandler) =>
+          pointerLeaveHandler(this, ev, hitMarker)
+        );
+      }
     }
   }
 

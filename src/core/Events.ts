@@ -21,6 +21,8 @@ export interface IEventListenerRepository {
   pointerdown: PointerEventHandler[];
   pointermove: PointerEventHandler[];
   pointerup: PointerEventHandler[];
+  pointerenter: PointerEventHandler[];
+  pointerleave: PointerEventHandler[];
 }
 
 export type EventHandler<T extends keyof IEventListenerRepository> = T extends 'select'
@@ -33,6 +35,10 @@ export type EventHandler<T extends keyof IEventListenerRepository> = T extends '
   ? PointerEventHandler
   : T extends 'pointerup'
   ? PointerEventHandler
+  : T extends 'pointerenter'
+  ? PointerEventHandler
+  : T extends 'pointerleave'
+  ? PointerEventHandler
   : MarkerViewEventHandler;
 
 export class EventListenerRepository implements IEventListenerRepository {
@@ -44,6 +50,8 @@ export class EventListenerRepository implements IEventListenerRepository {
   pointerdown: PointerEventHandler[] = [];
   pointermove: PointerEventHandler[] = [];
   pointerup: PointerEventHandler[] = [];
+  pointerenter: PointerEventHandler[] = [];
+  pointerleave: PointerEventHandler[] = [];
 
   public addEventListener<T extends keyof IEventListenerRepository>(
     eventType: T,
