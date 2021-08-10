@@ -43,6 +43,7 @@ export {
   EventListenerRepository,
   MarkerViewEventHandler,
   MarkerEventHandler,
+  PointerEventHandler
 } from './core/Events';
 
 export { IMarkerViewPlugin } from './core/MarkerViewPlugin';
