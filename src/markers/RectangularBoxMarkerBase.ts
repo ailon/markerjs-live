@@ -3,7 +3,6 @@ import { MarkerBase } from '../core/MarkerBase';
 import { IPoint } from '../core/IPoint';
 import { SvgHelper } from '../core/SvgHelper';
 
-import { Settings } from '../core/Settings';
 import { RectangularBoxMarkerBaseState } from './RectangularBoxMarkerBaseState';
 import { MarkerBaseState } from '../core/MarkerBaseState';
 import { TransformMatrix } from '../core/TransformMatrix';
@@ -107,11 +106,9 @@ export class RectangularBoxMarkerBase extends MarkerBase {
    * Creates a new marker.
    *
    * @param container - SVG container to hold marker's visual.
-   * @param overlayContainer - overlay HTML container to hold additional overlay elements while editing.
-   * @param settings - settings object containing default markers settings.
    */
-  constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
-    super(container, overlayContainer, settings);
+  constructor(container: SVGGElement) {
+    super(container);
 
     // add rotation transform
     this.container.transform.baseVal.appendItem(SvgHelper.createTransform());

@@ -1,7 +1,6 @@
 import { IPoint } from '../../core/IPoint';
 import { SvgHelper } from '../../core/SvgHelper';
 import { RectangularBoxMarkerBase } from '../RectangularBoxMarkerBase';
-import { Settings } from '../../core/Settings';
 import { TextMarkerState } from './TextMarkerState';
 import { MarkerBaseState } from '../../core/MarkerBaseState';
 
@@ -9,7 +8,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
   /**
    * String type name of the marker type.
    *
-   * Used when adding {@link MarkerArea.availableMarkerTypes} via a string and to save and restore state.
+   * Used when adding {@link MarkerView.availableMarkerTypes} via a string and to save and restore state.
    */
   public static typeName = 'TextMarker';
 
@@ -31,8 +30,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
    */
   protected padding = 5;
 
-  private readonly DEFAULT_TEXT = 'your text here';
-  private text: string = this.DEFAULT_TEXT;
+  private text = '';
   /**
    * Visual text element.
    */
@@ -42,23 +40,15 @@ export class TextMarker extends RectangularBoxMarkerBase {
    */
   protected bgRectangle: SVGRectElement;
 
-  private isMoved = false;
   private pointerDownPoint: IPoint;
-  private pointerDownTimestamp: number;
 
   /**
    * Creates a new marker.
    *
    * @param container - SVG container to hold marker's visual.
-   * @param overlayContainer - overlay HTML container to hold additional overlay elements while editing.
-   * @param settings - settings object containing default markers settings.
    */
-  constructor(
-    container: SVGGElement,
-    overlayContainer: HTMLDivElement,
-    settings: Settings
-  ) {
-    super(container, overlayContainer, settings);
+  constructor(container: SVGGElement) {
+    super(container);
 
     this.defaultSize = { x: 100, y: 30 };
 
@@ -127,9 +117,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
   public pointerDown(point: IPoint, target?: EventTarget): void {
     super.pointerDown(point, target);
 
-    this.isMoved = false;
     this.pointerDownPoint = point;
-    this.pointerDownTimestamp = Date.now();
   }
 
   private renderText() {
@@ -144,10 +132,12 @@ export class TextMarker extends RectangularBoxMarkerBase {
       this.textElement.appendChild(
         SvgHelper.createTSpan(
           // workaround for swallowed empty lines
-          line.trim() === '' ? ' ' : line.trim(), [
-          ['x', '0'],
-          ['dy', LINE_SIZE],
-        ])
+          line.trim() === '' ? ' ' : line.trim(),
+          [
+            ['x', '0'],
+            ['dy', LINE_SIZE],
+          ]
+        )
       );
     });
 
@@ -204,11 +194,6 @@ export class TextMarker extends RectangularBoxMarkerBase {
    */
   public manipulate(point: IPoint): void {
     super.manipulate(point);
-    if (this.pointerDownPoint !== undefined) {
-      this.isMoved =
-        Math.abs(point.x - this.pointerDownPoint.x) > 5 ||
-        Math.abs(point.y - this.pointerDownPoint.y) > 5;
-    }
   }
 
   /**
@@ -217,7 +202,6 @@ export class TextMarker extends RectangularBoxMarkerBase {
    */
   protected resize(point: IPoint): void {
     super.resize(point);
-    this.isMoved = true;
     this.setSize();
     this.sizeText();
   }

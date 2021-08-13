@@ -2,7 +2,6 @@ import { MarkerBase } from '../core/MarkerBase';
 
 import { IPoint } from '../core/IPoint';
 
-import { Settings } from '../core/Settings';
 import { LinearMarkerBaseState } from './LinearMarkerBaseState';
 import { MarkerBaseState } from '../core/MarkerBaseState';
 
@@ -32,14 +31,6 @@ export class LinearMarkerBase extends MarkerBase {
    */
   protected defaultLength = 50;
 
-  private manipulationStartX = 0;
-  private manipulationStartY = 0;
-
-  private manipulationStartX1 = 0;
-  private manipulationStartY1 = 0;
-  private manipulationStartX2 = 0;
-  private manipulationStartY2 = 0;
-
   /**
    * Marker's main visual.
    */
@@ -49,11 +40,9 @@ export class LinearMarkerBase extends MarkerBase {
    * Creates a LineMarkerBase object.
    * 
    * @param container - SVG container to hold marker's visual.
-   * @param overlayContainer - overlay HTML container to hold additional overlay elements while editing.
-   * @param settings - settings object containing default markers settings.
    */
-  constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
-    super(container, overlayContainer, settings);
+  constructor(container: SVGGElement) {
+    super(container);
   }
 
   /**

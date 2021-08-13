@@ -20,7 +20,6 @@ import { CurveMarker } from './markers/curve-marker/CurveMarker';
 import { MarkerAreaState } from './MarkerAreaState';
 import { IPoint } from './core/IPoint';
 
-import { Settings } from './core/Settings';
 import { StyleManager } from './core/Style';
 import {
   EventHandler,
@@ -30,25 +29,19 @@ import {
 import { IMarkerViewPlugin } from './core/MarkerViewPlugin';
 
 /**
- * @todo
- * MarkerArea is the main class of marker.js 2. It controls the behavior and appearance of the library.
+ * MarkerViews is the main class of marker.js Live. It controls the core behavior of the library.
  *
- * The simplest marker.js 2 usage scenario looks something like this:
+ * The simplest marker.js Live usage scenario looks something like this:
  *
  * ```typescript
- * import * as markerjs2 from 'markerjs2';
- * // create an instance of MarkerArea and pass the target image reference as a parameter
- * let markerArea = new markerjs2.MarkerArea(document.getElementById('myimg'));
+ * // skip this line if you are importing marker.js Live into the global space via the script tag
+ * import * as mjslive from 'markerjs-live';
  *
- * // register an event listener for when user clicks OK/save in the marker.js UI
- * markerArea.addRenderEventListener(dataUrl => {
- *   // we are setting the markup result to replace our original image on the page
- *   // but you can set a different image or upload it to your server
- *   document.getElementById('myimg').src = dataUrl;
- * });
+ * // create an instance of MarkerView and pass the target image reference as a parameter
+ * const markerView = new mjslive.MarkerView(target);
  *
- * // finally, call the show() method and marker.js UI opens
- * markerArea.show();
+ * // call the show() method and pass your annotation configuration (created with marker.js 2) as a parameter
+ * markerView.show(markerState);
  * ```
  */
 export class MarkerView {
@@ -59,7 +52,6 @@ export class MarkerView {
   private imageHeight: number;
   private left: number;
   private top: number;
-  private windowHeight: number;
 
   public markerImage: SVGSVGElement;
   private markerImageHolder: HTMLDivElement;
@@ -78,6 +70,9 @@ export class MarkerView {
 
   private static instanceCounter = 0;
   private _instanceNo: number;
+  /**
+   * Instance id of this instance
+   */
   public get instanceNo(): number {
     return this._instanceNo;
   }
@@ -87,6 +82,10 @@ export class MarkerView {
    */
   public styles: StyleManager;
 
+  /**
+   * Marker types supported by this instance. 
+   * You can remove some types to limit the markers displayed.
+   */
   public availableMarkerTypes: typeof MarkerBase[] = [
     FrameMarker,
     FreehandMarker,
@@ -103,13 +102,13 @@ export class MarkerView {
   ];
 
   /**
-   * `targetRoot` is used to set an alternative positioning root for the marker.js UI.
+   * `targetRoot` is used to set an alternative positioning root.
    *
    * This is useful in cases when your target image is positioned, say, inside a div with `position: relative;`
    *
    * ```typescript
    * // set targetRoot to a specific div instead of document.body
-   * markerArea.targetRoot = document.getElementById('myRootElement');
+   * markerView.targetRoot = document.getElementById('myRootElement');
    * ```
    *
    * @default document.body
@@ -118,15 +117,16 @@ export class MarkerView {
 
   private currentMarker?: MarkerBase;
   private hoveredMarker?: MarkerBase;
+  /**
+   * The list of all markers displayed.
+   */
   public markers: MarkerBase[] = [];
 
   private isDragging = false;
 
-  public settings: Settings = new Settings();
-
   private _isOpen = false;
   /**
-   * Returns `true` when MarkerArea is open and `false` otherwise.
+   * Returns `true` when MarkerView is open and `false` otherwise.
    *
    * @readonly
    */
@@ -136,17 +136,20 @@ export class MarkerView {
 
   private plugins: IMarkerViewPlugin[] = [];
 
+  /**
+   * The suffix of the CSS class name of the marker container (SVG group) element.
+   */
   public readonly MARKER_CONTAINER_CLASS_SUFFIX = 'marker-container';
 
   /**
-   * Creates a new MarkerArea for the specified target image.
+   * Creates a new MarkerView for the specified target image.
    *
    * ```typescript
-   * // create an instance of MarkerArea and pass the target image reference as a parameter
-   * let markerArea = new markerjs2.MarkerArea(document.getElementById('myimg'));
+   * // create an instance of MarkerView and pass the target image reference as a parameter
+   * let markerView = new mjslive.MarkerView(document.getElementById('myimg'));
    * ```
    *
-   * @param target image object to mark up.
+   * @param target image object to be overlayed with markers.
    */
   constructor(target: HTMLImageElement) {
     this._instanceNo = MarkerView.instanceCounter++;
@@ -170,7 +173,6 @@ export class MarkerView {
     this.closeUI = this.closeUI.bind(this);
     this.clientToLocalCoordinates = this.clientToLocalCoordinates.bind(this);
     this.onWindowResize = this.onWindowResize.bind(this);
-    this.setWindowHeight = this.setWindowHeight.bind(this);
     this.removeMarker = this.removeMarker.bind(this);
   }
 
@@ -195,9 +197,10 @@ export class MarkerView {
 
   /**
    * Initializes the MarkerView and show the markers.
+   * 
+   * @param state - marker configuration created with marker.js 2.
    */
   public show(state: MarkerAreaState): void {
-    this.setWindowHeight();
     this.showUI();
     this.open();
     
@@ -211,7 +214,7 @@ export class MarkerView {
   }
 
   /**
-   * Closes the MarkerArea UI.
+   * Closes the MarkerView.
    */
   public close(): void {
     if (this.isOpen) {
@@ -234,10 +237,6 @@ export class MarkerView {
       });
       this.targetObserver.observe(this.target);
     }
-  }
-
-  private setWindowHeight() {
-    this.windowHeight = window.innerHeight;
   }
 
   private resize(newWidth: number, newHeight: number) {
@@ -476,25 +475,10 @@ export class MarkerView {
     marker.dispose();
   }
 
-  private selectLastMarker() {
-    if (this.markers.length > 0) {
-      this.setCurrentMarker(this.markers[this.markers.length - 1]);
-    }
-  }
-
   /**
-   * Restores MarkerArea state to continue previous annotation session.
+   * Uses the state created with marker.js 2 to display the markers.
    *
-   * **IMPORTANT**: call `restoreState()` __after__ you've opened the MarkerArea with {@linkcode show}.
-   *
-   * ```typescript
-   * this.markerArea1.show();
-   * if (this.currentState) {
-   *   this.markerArea1.restoreState(this.currentState);
-   * }
-   * ```
-   *
-   * @param state - previously saved state object.
+   * @param state - previously saved marker.js 2 state object.
    */
   private restoreState(state: MarkerAreaState): void {
     this.markers.splice(0);
@@ -528,7 +512,7 @@ export class MarkerView {
     g.setAttribute('class', `${this.styles.classNamePrefix}${this.MARKER_CONTAINER_CLASS_SUFFIX}`);
     this.markerImage.appendChild(g);
 
-    return new markerType(g, this.overlayContainer, this.settings);
+    return new markerType(g);
   }
 
   /**
@@ -686,6 +670,12 @@ export class MarkerView {
   }
 
   private eventListeners = new EventListenerRepository();
+  /**
+   * Adds an event listener for one of the marker.js Live events.
+   * 
+   * @param eventType - type of the event.
+   * @param handler - function handling the event.
+   */
   public addEventListener<T extends keyof IEventListenerRepository>(
     eventType: T,
     handler: EventHandler<T>
@@ -693,10 +683,18 @@ export class MarkerView {
     this.eventListeners.addEventListener(eventType, handler);
   }
 
+  /**
+   * Adds a plugin to the plugin array.
+   * @param plugin 
+   */
   public addPlugin(plugin: IMarkerViewPlugin): void {
     this.plugins.push(plugin);
   }
   
+  /**
+   * Removes a plugin from the plugin array.
+   * @param plugin 
+   */
   public removePlugin(plugin: IMarkerViewPlugin): void {
     const pluginIndex = this.plugins.indexOf(plugin);
     if (pluginIndex >= 0) {

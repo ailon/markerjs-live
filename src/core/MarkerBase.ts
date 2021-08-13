@@ -1,18 +1,17 @@
 import { SvgHelper } from './SvgHelper';
 import { IPoint } from './IPoint';
 import { MarkerBaseState } from './MarkerBaseState';
-import { Settings } from './Settings';
 
 /**
  * Base class for all available and custom marker types.
  * 
- * All markers used with marker.js 2 should be descendants of this class.
+ * All markers used with marker.js Live should be descendants of this class.
  */
 export class MarkerBase {
   /**
    * String type name of the marker type. 
    * 
-   * Used when adding {@link MarkerArea.availableMarkerTypes} via a string and to save and restore state.
+   * Used when adding {@link MarkerView.availableMarkerTypes} via a string and to save and restore state.
    */
   public static typeName = 'MarkerBase';
 
@@ -31,16 +30,6 @@ export class MarkerBase {
   public get container(): SVGGElement {
     return this._container;
   }
-  protected _overlayContainer: HTMLDivElement;
-  /**
-   * HTML container that can be used to render overlay objects while the marker is active.
-   * 
-   * For example, this is used for the text editing layer while editing text in the {@see TextMarker}.
-   */
-  public get overlayContainer(): HTMLDivElement {
-    return this._overlayContainer;
-  }
-  protected globalSettings: Settings;
 
   /**
    * Additional information about the marker
@@ -61,16 +50,12 @@ export class MarkerBase {
    * Creates a new marker.
    *
    * @param container - SVG container to hold marker's visual.
-   * @param overlayContainer - overlay HTML container to hold additional overlay elements while editing.
-   * @param settings - settings object containing default markers settings.
    */
-  constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
+  constructor(container: SVGGElement) {
     this._outerContainer = container;
     const innerContainer = SvgHelper.createGroup();
     this._outerContainer.appendChild(innerContainer);
     this._container = innerContainer;
-    this._overlayContainer = overlayContainer;
-    this.globalSettings = settings;
   }
 
   /**
@@ -84,18 +69,16 @@ export class MarkerBase {
   }
 
   /**
-   * Selects this marker and displays appropriate selected marker UI.
+   * Selects this marker.
    */
-  public select(): void {
-    this.container.style.cursor = 'move';
-  }
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  public select(): void {}
 
   /**
-   * Deselects this marker and hides selected marker UI.
+   * Deselects this marker.
    */
-  public deselect(): void {
-    this.container.style.cursor = 'default';
-  }
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  public deselect(): void {}
 
   /**
    * Handles pointer (mouse, touch, stylus, etc.) down event.
@@ -137,6 +120,10 @@ export class MarkerBase {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   public dispose(): void {}
 
+  /**
+   * Adds marker's root visual element to the container group.
+   * @param element - marker's visual element.
+   */
   protected addMarkerVisualToContainer(element: SVGElement): void {
     if (this.container.childNodes.length > 0) {
       this.container.insertBefore(element, this.container.childNodes[0]);

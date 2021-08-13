@@ -1,11 +1,10 @@
-import { Settings } from '../../core/Settings';
 import { EllipseMarker } from '../ellipse-marker/EllipseMarker';
 
 export class EllipseFrameMarker extends EllipseMarker {
   /**
    * String type name of the marker type. 
    * 
-   * Used when adding {@link MarkerArea.availableMarkerTypes} via a string and to save and restore state.
+   * Used when adding {@link MarkerView.availableMarkerTypes} via a string and to save and restore state.
    */
   public static typeName = 'EllipseFrameMarker';
   /**
@@ -17,11 +16,9 @@ export class EllipseFrameMarker extends EllipseMarker {
    * Creates a new marker.
    *
    * @param container - SVG container to hold marker's visual.
-   * @param overlayContainer - overlay HTML container to hold additional overlay elements while editing.
-   * @param settings - settings object containing default markers settings.
    */
-  constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
-    super(container, overlayContainer, settings);
+  constructor(container: SVGGElement) {
+    super(container);
 
     this.fillColor = 'transparent';
   }

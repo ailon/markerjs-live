@@ -1,5 +1,5 @@
 /**
- * Manages commercial marker.js 2 licenses.
+ * Manages commercial marker.js Live licenses.
  */
 export class Activator {
   private static key: string;
@@ -13,7 +13,7 @@ export class Activator {
   }
 
   /**
-   * Returns true if the copy of marker.js is commercially licensed.
+   * Returns true if the copy of marker.js Live is commercially licensed.
    */
   public static get isLicensed(): boolean {
     // NOTE:

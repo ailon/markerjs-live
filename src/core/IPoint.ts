@@ -1,5 +1,5 @@
 /**
- * Describes point objects used internally in marker.js 2.
+ * Describes point objects used internally in marker.js.
  */
 export interface IPoint {
   x: number,

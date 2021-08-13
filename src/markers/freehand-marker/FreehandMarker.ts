@@ -1,15 +1,14 @@
 import { IPoint } from '../../core/IPoint';
 import { SvgHelper } from '../../core/SvgHelper';
 import { RectangularBoxMarkerBase } from '../RectangularBoxMarkerBase';
-import { Settings } from '../../core/Settings';
 import { FreehandMarkerState } from './FreehandMarkerState';
 import { MarkerBaseState } from '../../core/MarkerBaseState';
 
 export class FreehandMarker extends RectangularBoxMarkerBase {
   /**
-   * String type name of the marker type. 
-   * 
-   * Used when adding {@link MarkerArea.availableMarkerTypes} via a string and to save and restore state.
+   * String type name of the marker type.
+   *
+   * Used when adding {@link MarkerView.availableMarkerTypes} via a string and to save and restore state.
    */
   public static typeName = 'FreehandMarker';
 
@@ -30,26 +29,18 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
   private drawingImage: SVGImageElement;
   private drawingImgUrl: string;
 
-  private drawing = false;
-
   /**
    * Creates a new marker.
    *
    * @param container - SVG container to hold marker's visual.
-   * @param overlayContainer - overlay HTML container to hold additional overlay elements while editing.
-   * @param settings - settings object containing default markers settings.
    */
-  constructor(
-    container: SVGGElement,
-    overlayContainer: HTMLDivElement,
-    settings: Settings
-  ) {
-    super(container, overlayContainer, settings);
+  constructor(container: SVGGElement) {
+    super(container);
   }
 
   /**
    * Returns true if passed SVG element belongs to the marker. False otherwise.
-   * 
+   *
    * @param el - target element.
    */
   public ownsTarget(el: EventTarget): boolean {
@@ -76,7 +67,7 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
 
   /**
    * Handles pointer (mouse, touch, stylus, etc.) down event.
-   * 
+   *
    * @param point - event coordinates.
    * @param target - direct event target element.
    */
@@ -86,7 +77,7 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
 
   /**
    * Handles marker manipulation (move, resize, rotate, etc.).
-   * 
+   *
    * @param point - event coordinates.
    */
   public manipulate(point: IPoint): void {
@@ -95,7 +86,7 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
 
   /**
    * Resize marker based on current pointer coordinates and context.
-   * @param point 
+   * @param point
    */
   protected resize(point: IPoint): void {
     super.resize(point);
@@ -111,7 +102,7 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
 
   /**
    * Handles pointer (mouse, touch, stylus, etc.) up event.
-   * 
+   *
    * @param point - event coordinates.
    */
   public pointerUp(point: IPoint): void {
@@ -143,7 +134,7 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
 
   /**
    * Restores previously saved marker state.
-   * 
+   *
    * @param state - previously saved state.
    */
   public restoreState(state: MarkerBaseState): void {
@@ -155,7 +146,7 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
 
   /**
    * Scales marker. Used after the image resize.
-   * 
+   *
    * @param scaleX - horizontal scale
    * @param scaleY - vertical scale
    */
@@ -164,5 +155,4 @@ export class FreehandMarker extends RectangularBoxMarkerBase {
 
     this.setDrawingImage();
   }
-
 }

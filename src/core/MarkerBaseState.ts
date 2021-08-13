@@ -17,8 +17,6 @@ export interface MarkerBaseState {
   state: MarkerState;
   /**
    * Additional information about the marker.
-   * 
-   * @since 2.10.0
    */
   notes?: string;
 }

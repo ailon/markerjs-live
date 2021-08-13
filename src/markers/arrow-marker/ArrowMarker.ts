@@ -1,6 +1,5 @@
 import { IPoint } from '../../core/IPoint';
 import { SvgHelper } from '../../core/SvgHelper';
-import { Settings } from '../../core/Settings';
 import { LineMarker } from '../line-marker/LineMarker';
 import { ArrowMarkerState, ArrowType } from './ArrowMarkerState';
 import { MarkerBaseState } from '../../core/MarkerBaseState';
@@ -12,7 +11,7 @@ export class ArrowMarker extends LineMarker {
   /**
    * String type name of the marker type. 
    * 
-   * Used when adding {@link MarkerArea.availableMarkerTypes} via a string and to save and restore state.
+   * Used when adding {@link MarkerView.availableMarkerTypes} via a string and to save and restore state.
    */
   public static typeName = 'ArrowMarker';
 
@@ -33,11 +32,9 @@ export class ArrowMarker extends LineMarker {
    * Creates a new marker.
    *
    * @param container - SVG container to hold marker's visual.
-   * @param overlayContainer - overlay HTML container to hold additional overlay elements while editing.
-   * @param settings - settings object containing default markers settings.
    */
-  constructor(container: SVGGElement, overlayContainer: HTMLDivElement, settings: Settings) {
-    super(container, overlayContainer, settings);
+  constructor(container: SVGGElement) {
+    super(container);
 
     this.getArrowPoints = this.getArrowPoints.bind(this);
     this.setArrowType = this.setArrowType.bind(this);
