@@ -1,6 +1,6 @@
 {
   "name": "markerjs-live",
-  "version": "1.0.0-alpha.4",
+  "version": "1.0.0-beta.0",
   "description": "Live player for image annotations created with marker.js 2",
   "main": "markerjs-live.js",
   "module": "markerjs-live.esm.js",
