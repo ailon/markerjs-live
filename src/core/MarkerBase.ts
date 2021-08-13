@@ -99,14 +99,6 @@ export class MarkerBase {
   public dblClick(point: IPoint, target?: EventTarget):void {}
 
   /**
-   * Handles marker manipulation (move, resize, rotate, etc.).
-   * 
-   * @param point - event coordinates.
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-  public manipulate(point: IPoint):void {}
-
-  /**
    * Handles pointer (mouse, touch, stylus, etc.) up event.
    * 
    * @param point - event coordinates.

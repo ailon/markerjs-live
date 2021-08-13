@@ -91,15 +91,6 @@ export class EllipseMarker extends RectangularBoxMarkerBase {
   }
 
   /**
-   * Handles marker manipulation (move, resize, rotate, etc.).
-   * 
-   * @param point - event coordinates.
-   */
-  public manipulate(point: IPoint): void {
-    super.manipulate(point);
-  }
-
-  /**
    * Resize marker based on current pointer coordinates and context.
    * @param point 
    */

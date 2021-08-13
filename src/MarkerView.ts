@@ -581,9 +581,6 @@ export class MarkerView {
     if (this.touchPoints === 1 || ev.pointerType !== 'touch') {
       if (this.currentMarker !== undefined || this.isDragging) {
         ev.preventDefault();
-        this.currentMarker.manipulate(
-          this.clientToLocalCoordinates(ev.clientX, ev.clientY)
-        );
       }
     }
 

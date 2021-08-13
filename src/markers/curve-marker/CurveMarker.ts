@@ -127,14 +127,6 @@ export class CurveMarker extends LinearMarkerBase {
   }
 
   /**
-   * Moves or resizes the marker.
-   * @param point event coordinates
-   */
-  public manipulate(point: IPoint): void {
-    super.manipulate(point);
-  }
-
-  /**
    * Sets line color.
    * @param color - new color.
    */

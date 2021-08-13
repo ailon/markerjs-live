@@ -81,15 +81,6 @@ export class CalloutMarker extends TextMarker {
   }
 
   /**
-   * Handles marker manipulation (move, resize, rotate, etc.).
-   *
-   * @param point - event coordinates.
-   */
-  public manipulate(point: IPoint): void {
-    super.manipulate(point);
-  }
-
-  /**
    * Sets marker's background/fill color.
    * @param color - new background color.
    */

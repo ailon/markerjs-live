@@ -89,15 +89,6 @@ export abstract class RectangleMarker extends RectangularBoxMarkerBase {
   }
 
   /**
-   * Handles marker manipulation (move, resize, rotate, etc.).
-   * 
-   * @param point - event coordinates.
-   */
-  public manipulate(point: IPoint): void {
-    super.manipulate(point);
-  }
-
-  /**
    * Resizes the marker based on the pointer coordinates.
    * @param point - current pointer coordinates.
    */
