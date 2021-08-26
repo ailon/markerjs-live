@@ -113,6 +113,12 @@ export class Experiments {
 
   constructor() {
     //Activator.addKey('1234');
+    this.dummyEventListener = this.dummyEventListener.bind(this);
+  }
+
+  public dummyEventListener(): void {
+    console.log('dummy');
+    this.markerView1.removeEventListener('pointerleave', this.dummyEventListener);
   }
 
   public openMarkerView(target: HTMLImageElement): void {
@@ -153,6 +159,7 @@ export class Experiments {
     this.markerView1.addEventListener('pointerleave', (mv, ev, marker) =>
       console.log('leave:', ev.clientX, ev.clientY, marker)
     );
+    this.markerView1.addEventListener('pointerleave', this.dummyEventListener);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     //this.markerView1.addEventListener('pointermove', (mv, ev, marker) => console.log('move:', ev.clientX, ev.clientY));
 

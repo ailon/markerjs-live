@@ -146,4 +146,19 @@ export class EventListenerRepository implements IEventListenerRepository {
   ): void {
     (<Array<EventHandler<T>>>this[eventType]).push(handler);
   }
+
+  /**
+   * Remove an event handler for a specific event type.
+   * @param eventType - event type.
+   * @param handler - function currently handling the event.
+   */
+  public removeEventListener<T extends keyof IEventListenerRepository>(
+    eventType: T,
+    handler: EventHandler<T>
+  ): void {
+    const index = (<Array<EventHandler<T>>>this[eventType]).indexOf(handler);
+    if (index > -1) {
+      (<Array<EventHandler<T>>>this[eventType]).splice(index, 1);
+    }
+  }
 }

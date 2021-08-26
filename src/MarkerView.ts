@@ -681,6 +681,19 @@ export class MarkerView {
   }
 
   /**
+   * Removes an event listener for one of the marker.js Live events.
+   * 
+   * @param eventType - type of the event.
+   * @param handler - function currently handling the event.
+   */
+  public removeEventListener<T extends keyof IEventListenerRepository>(
+    eventType: T,
+    handler: EventHandler<T>
+  ): void {
+    this.eventListeners.removeEventListener(eventType, handler);
+  }
+
+  /**
    * Adds a plugin to the plugin array.
    * @param plugin 
    */
