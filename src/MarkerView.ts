@@ -45,7 +45,7 @@ import { IMarkerViewPlugin } from './core/MarkerViewPlugin';
  * ```
  */
 export class MarkerView {
-  private target: HTMLImageElement;
+  private target: HTMLElement;
   private targetObserver: ResizeObserver;
 
   private imageWidth: number;
@@ -61,7 +61,7 @@ export class MarkerView {
   private uiDiv: HTMLDivElement;
   private contentDiv: HTMLDivElement;
   private editorCanvas: HTMLDivElement;
-  private editingTarget: HTMLImageElement;
+  private editingTarget: HTMLCanvasElement;
   private overlayContainer: HTMLDivElement;
 
   private touchPoints = 0;
@@ -151,7 +151,7 @@ export class MarkerView {
    *
    * @param target image object to be overlayed with markers.
    */
-  constructor(target: HTMLImageElement) {
+  constructor(target: HTMLElement) {
     this._instanceNo = MarkerView.instanceCounter++;
 
     this.styles = new StyleManager(this.instanceNo);
@@ -245,7 +245,7 @@ export class MarkerView {
 
     this.imageWidth = Math.round(newWidth);
     this.imageHeight = Math.round(newHeight);
-    this.editingTarget.src = this.target.src;
+    // this.editingTarget.src = this.target.src;
     this.editingTarget.width = this.imageWidth;
     this.editingTarget.height = this.imageHeight;
     this.editingTarget.style.width = `${this.imageWidth}px`;
@@ -286,7 +286,7 @@ export class MarkerView {
   private setEditingTarget() {
     this.imageWidth = Math.round(this.target.clientWidth);
     this.imageHeight = Math.round(this.target.clientHeight);
-    this.editingTarget.src = this.target.src;
+    // this.editingTarget.src = this.target.src;
     this.editingTarget.width = this.imageWidth;
     this.editingTarget.height = this.imageHeight;
     this.editingTarget.style.width = `${this.imageWidth}px`;
@@ -458,7 +458,7 @@ export class MarkerView {
     this.editorCanvas.style.pointerEvents = 'none';
     this.contentDiv.appendChild(this.editorCanvas);
 
-    this.editingTarget = document.createElement('img');
+    this.editingTarget = document.createElement('canvas');
     this.editorCanvas.appendChild(this.editingTarget);
   }
 
