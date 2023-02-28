@@ -35,6 +35,8 @@ export { TextMarker } from './markers/text-marker/TextMarker';
 export { TextMarkerState } from './markers/text-marker/TextMarkerState';
 export { CurveMarker } from './markers/curve-marker/CurveMarker';
 export { CurveMarkerState } from './markers/curve-marker/CurveMarkerState';
+export { CaptionFrameMarker } from './markers/caption-frame-marker/CaptionFrameMarker';
+export { CaptionFrameMarkerState } from './markers/caption-frame-marker/CaptionFrameMarkerState';
 
 export {
   EventHandler,
