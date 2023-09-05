@@ -20,4 +20,8 @@ export interface TextMarkerState extends RectangularBoxMarkerBaseState {
    * Marker's text content.
    */
   text: string;
+  /**
+   * If true, text wrapping logic will be applied.
+   */
+  wrapText?: boolean;
 }

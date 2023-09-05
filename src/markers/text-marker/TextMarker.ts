@@ -31,6 +31,9 @@ export class TextMarker extends RectangularBoxMarkerBase {
   protected padding = 5;
 
   private text = '';
+
+  private wrapText = false;
+
   /**
    * Visual text element.
    */
@@ -57,6 +60,7 @@ export class TextMarker extends RectangularBoxMarkerBase {
     this.renderText = this.renderText.bind(this);
     this.sizeText = this.sizeText.bind(this);
     this.setSize = this.setSize.bind(this);
+    this.getWrappedText = this.getWrappedText.bind(this);
   }
 
   /**
@@ -120,6 +124,70 @@ export class TextMarker extends RectangularBoxMarkerBase {
     this.pointerDownPoint = point;
   }
 
+  private getWrappedText(): string {
+    function getTextAspectRatio(textLines: string[]): number {
+      const charsLinesAspectRatio = 0.35;
+
+      let longestLineChars = textLines[0].length;
+      textLines.forEach(line => {
+        if (line.length > longestLineChars) {
+          longestLineChars = line.length;
+        }
+      });
+
+      return longestLineChars * charsLinesAspectRatio / textLines.length;
+    }
+
+    if (this.text !== '') {
+      const lines = this.text.split(/\r\n|[\n\v\f\r\x85\u2028\u2029]/);
+      const boxAspectRatio = this.width * 1.0 / this.height;
+      let processedLines = new Array<string>(...lines);
+      
+      let textAspectRatio = getTextAspectRatio(processedLines);
+
+      let maxLineLength = Number.MAX_VALUE;
+      while (textAspectRatio > boxAspectRatio) {
+        let longestLine = processedLines[0];
+        processedLines.forEach(line => {
+          if (line.length > longestLine.length) {
+            longestLine = line;
+          }
+        });
+        maxLineLength = longestLine.lastIndexOf(' ', maxLineLength - 1);
+
+        if (maxLineLength > 0) {
+          processedLines = [];
+          lines.forEach(line => {
+            let reminderLine = line;
+            while (reminderLine.length > maxLineLength) {
+              let maxEnd = reminderLine.lastIndexOf(' ', maxLineLength);
+              if (maxEnd < 0) {
+                // if the first word is longer than max, at least wrap after it
+                maxEnd = reminderLine.indexOf(' ');
+              }
+              if (maxEnd > 0) {
+                processedLines.push(reminderLine.substring(0, maxEnd));
+                reminderLine = reminderLine.substring(maxEnd).trim();
+              } else {
+                processedLines.push(reminderLine);
+                reminderLine = '';
+              }
+            }
+            processedLines.push(reminderLine);
+          });
+          textAspectRatio = getTextAspectRatio(processedLines);
+        } else {
+          // can't wrap no more
+          textAspectRatio = -1;
+        }
+      }
+
+      return processedLines.join(`\r\n`);
+    } else {
+      return this.text;
+    }
+  }  
+
   private renderText() {
     const LINE_SIZE = '1.2em';
 
@@ -127,17 +195,16 @@ export class TextMarker extends RectangularBoxMarkerBase {
       this.textElement.removeChild(this.textElement.lastChild);
     }
 
-    const lines = this.text.split(/\r\n|[\n\v\f\r\x85\u2028\u2029]/);
+    const processedText = this.wrapText ? this.getWrappedText() : this.text;
+    const lines = processedText.split(/\r\n|[\n\v\f\r\x85\u2028\u2029]/);
     lines.forEach((line) => {
       this.textElement.appendChild(
         SvgHelper.createTSpan(
           // workaround for swallowed empty lines
-          line.trim() === '' ? ' ' : line.trim(),
-          [
-            ['x', '0'],
-            ['dy', LINE_SIZE],
-          ]
-        )
+          line.trim() === '' ? ' ' : line.trim(), [
+          ['x', '0'],
+          ['dy', LINE_SIZE],
+        ])
       );
     });
 
@@ -268,10 +335,15 @@ export class TextMarker extends RectangularBoxMarkerBase {
     this.fontFamily = textState.fontFamily;
     this.padding = textState.padding;
     this.text = textState.text;
+    this.wrapText = textState.wrapText === true;
 
     this.createVisual();
     super.restoreState(state);
     this.setSize();
+    if (this.wrapText) {
+      // need a rerender post setting size for wrapping
+      this.renderText();
+    }
   }
 
   /**

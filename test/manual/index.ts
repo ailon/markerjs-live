@@ -51,7 +51,9 @@ export class Experiments {
         color: '#EF4444',
         fontFamily: 'Helvetica, Arial, sans-serif',
         padding: 5,
-        text: 'Hello there!',
+        text: `/** * Enable word wrapping in text markers (\`TextMarker\`, \`CalloutMarker\`) * * @since 2.30.0 */ 
+        public wrapText = false;`,
+        wrapText: true,
         left: 226,
         top: 214,
         width: 167,
@@ -69,6 +71,7 @@ export class Experiments {
         fontFamily: 'Helvetica, Arial, sans-serif',
         padding: 5,
         text: 'This is awesome!',
+        wrapText: true,
         left: 117,
         top: 56,
         width: 167,
