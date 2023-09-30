@@ -581,7 +581,10 @@ export class MarkerView {
   private isPointerIn = false;
   private onPointerMove(ev: PointerEvent) {
     if (this.touchPoints === 1 || ev.pointerType !== 'touch') {
-      if (this.currentMarker !== undefined || this.isDragging) {
+      if (
+        (this.currentMarker !== undefined && this.currentMarker.ownsTarget(ev.target)) || 
+        this.isDragging
+        ) {
         ev.preventDefault();
       }
     }
